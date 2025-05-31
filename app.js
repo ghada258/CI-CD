@@ -5,18 +5,20 @@ const bodyParser = require('body-parser');
 const mongoose = require("mongoose");
 const app = express();
 const cors = require('cors')
+// require('dotenv').config();
 
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '/')));
 app.use(cors())
 
-mongoose.connect(process.env.MONGO_URI, {
-    user: process.env.MONGO_USERNAME,
-    pass: process.env.MONGO_PASSWORD,
+mongoose.connect('mongodb+srv://<username>:<password>@supercluster.d83jj.mongodb.net/superData?retryWrites=true&w=majority'
+    , {
+    user: 'superuser',
+    pass: 'SuperPassword',
     useNewUrlParser: true,
     useUnifiedTopology: true
-}, function(err) {
+}, function(err) {
     if (err) {
         console.log("error!! " + err)
     } else {
