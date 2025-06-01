@@ -21,7 +21,7 @@
     "mongoose": "5.13.20"
   },
   "devDependencies": {
-    "chai": "*",
+    "chai": "^4.3.7",
     "chai-http": "*",
     "cross-env": "^7.0.3",
     "mocha": "^11.5.0",
