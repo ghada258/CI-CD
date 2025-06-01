@@ -1,0 +1,52 @@
+name : test_unit
+
+on : 
+    push:
+        branches:
+           - 'main' 
+
+            
+env: 
+    MONGO_URI : 'mongodb+srv://supercluster.d83jj.mongodb.net/superData'
+    MONGO_USERNAME : ${{vars.MONGO_USERNAME}}
+    MONGO_PASSWORD : ${{secrets.MONGO_PASSWORD}}
+ 
+jobs: 
+    unit-testing :
+        name: Unit Testing
+        strategy :
+            matrix:
+                nodejs_version : [18]
+                operating_system : [ubuntu-latest]
+                #operating_system: [ubuntu-latest , macos-latest]
+
+                exclude :
+                   - nodejs_version : 18
+                     operating_system : macos-latest
+
+        runs-on : ${{matrix.operating_system}}
+
+        steps :
+            - name: Checkout Code
+              uses: actions/checkout@v3
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v3
+              with:
+                node-version: ${{ matrix.nodejs_version }}
+
+            - name : Install Dependencies  
+              run : npm install 
+                    
+            - name : Unit Testing
+              id : nodejs-unit-testing-step
+              run : npm test
+
+            - name : Archive test result
+              if : steps.nodejs-unit-testing-step.outcome == 'failure' || steps.nodejs-unit-testing-step.outcome == 'success'
+              uses : actions/upload-artifact@v4.6.2  
+              with :
+                name : Unit-Testing-Result
+                path : test-results.xml
+
+                    
